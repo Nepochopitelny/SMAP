@@ -7,6 +7,9 @@ from sklearn.svm import SVC
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.ensemble import RandomForestClassifier
 import time
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
 
 def applyFutureSelection(X_train_vec, X_test_vec, y_train, futureSelectionAlgorithm):
     print("Applying chi squared feature selection")
@@ -61,9 +64,26 @@ result = testMLAlgorithm(MultinomialNB(), X_train_vec, X_test_vec, y_train, y_te
 print("Testing support vector algorithm")
 #testMLAlgorithm(SVC(), X_train_vec, X_test_vec, y_train, y_test, chi2)
 
-while(True):
-    user_input = input("Text to test: ")
-    tic = time.perf_counter()
-    print(testUserInput(result, user_input))
-    toc = time.perf_counter()
-    print(f"Message was classified in {toc - tic:0.8f} seconds")
+    
+# API endpoint
+@app.route('/test', methods=['POST'])
+def apiTestUserInput():
+    try:
+        data = request.get_json()
+        user_input = data['user_input']
+
+        detected_result = testUserInput(result, user_input)
+
+        response = {
+            'text': user_input,
+            'prediction': detected_result
+        }
+
+        return jsonify(response)
+
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
