@@ -8,8 +8,11 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.ensemble import RandomForestClassifier
 import time
 from flask import Flask, request, jsonify
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 def applyFutureSelection(X_train_vec, X_test_vec, y_train, futureSelectionAlgorithm):
     print("Applying feature selection")
@@ -42,6 +45,7 @@ result = testMLAlgorithm(MultinomialNB(), X_train_vec, X_test_vec, y_train, y_te
     
 # API endpoint
 @app.route('/test', methods=['POST'])
+@cross_origin()
 def apiTestUserInput():
     try:
         data = request.get_json()
