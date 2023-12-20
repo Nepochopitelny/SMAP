@@ -6,6 +6,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 import nltk
 nltk.download('wordnet')
+nltk.download('stopwords')
 
 vectorizer = CountVectorizer()
 

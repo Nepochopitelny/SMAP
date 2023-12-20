@@ -12,7 +12,7 @@ from flask import Flask, request, jsonify
 app = Flask(__name__)
 
 def applyFutureSelection(X_train_vec, X_test_vec, y_train, futureSelectionAlgorithm):
-    print("Applying chi squared feature selection")
+    print("Applying feature selection")
     selector = SelectKBest(futureSelectionAlgorithm, k=8)
     X_train = selector.fit_transform(X_train_vec, y_train)
     X_test = selector.transform(X_test_vec)
@@ -33,36 +33,11 @@ def testUserInput(algorithm, text):
     return f"Input text is {result[0]}" 
 
 
-#X_train_vec, X_test_vec, y_train, y_test = getVectorizedDataFromDataFrame('spam_NStugard.csv', ',',0.2, TfidfVectorizer())
 X_train_vec, X_test_vec, y_train, y_test = getVectorizedDataFromDataFrame('spam_v2.csv', ';',0.2)
-print("Testing results with TFID Vectorizer")
-
-print("Testing RandomForestClassifier algorithm")
-#testMLAlgorithm(RandomForestClassifier(), X_train_vec, X_test_vec, y_train, y_test, mutual_info_classif)
-
-print("Testing MultinomialNB algorithm")
-#testMLAlgorithm(MultinomialNB(), X_train_vec, X_test_vec, y_train, y_test, mutual_info_classif)
-
-print("Testing support vector algorithm")
-#testMLAlgorithm(SVC(), X_train_vec, X_test_vec, y_train, y_test, mutual_info_classif)
 
 
-
-
-#X_train_vec, X_test_vec, y_train, y_test = getVectorizedDataFromDataFrame('spam_NStugard.csv', ',',0.2, CountVectorizer())
-X_train_vec, X_test_vec, y_train, y_test = getVectorizedDataFromDataFrame('spam_v2.csv', ';',0.2)
-print("##########################################################################################")
-print("##########################################################################################")
-print("##########################################################################################")
-print("Testing with CountVectorizer")
-print("Testing RandomForestClassifier algorithm")
-#testMLAlgorithm(KNeighborsClassifier(), X_train_vec, X_test_vec, y_train, y_test, chi2)
-
-print("Testing MultinomialNB algorithm")
+print("Train MultinomialNB algorithm")
 result = testMLAlgorithm(MultinomialNB(), X_train_vec, X_test_vec, y_train, y_test)
-
-print("Testing support vector algorithm")
-#testMLAlgorithm(SVC(), X_train_vec, X_test_vec, y_train, y_test, chi2)
 
     
 # API endpoint
